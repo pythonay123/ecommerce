@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Welcome to{% endblock title %}
 {% block styles %}
     .starter-template {
-        color: #962006;
+        color: #251F1F;
         }
 {% endblock styles %}
 
@@ -25,15 +26,29 @@
     <div class="starter-template">
         <div class="row">
             {% for product in products %}
-                <div class="col-sm-4">
-                    {{ product.id }}
-                    {{ product.title }}
-                    {{ product.price }}
-                    {% for item in product.productimage_set.all %}
-                        {% if item.featured %}
-                            <img src="{{ item.image.url }}"/>
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        {% if product.productimage_set.all %}
+                            {% for item in product.productimage_set.all %}
+                                {% if item.featured %}
+                                    <img class="img-responsive" src="{{ item.image.url }}"/>
+                                {% else %}
+                                    <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
                         {% endif %}
-                    {% endfor %}
+                        <div class="caption">
+                            <a href="{% url 'single_product' product.slug %}"><h4>{{ product.title }}</h4></a>
+                            <p>{{ product.description }}</p>
+                            <p><a class="btn btn-primary" role="button" href="{% url 'single_product' product.slug %}">
+                                view
+                            </a></p>
+    <!--                    <a href="{{ product.get_absolute_url }}">{{ product }}</a>-->
+                            {{ product.price }}
+                        </div>
+                    </div>
                 </div>
             {% cycle "" "" "</div><br/><hr/><div class='row'>" %}
             {% endfor %}

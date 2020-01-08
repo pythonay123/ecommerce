@@ -1,5 +1,6 @@
 from django.db import models
 from PIL import Image
+from django.shortcuts import reverse
 
 
 # Create your models here.
@@ -9,16 +10,23 @@ class Product(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=30, default=0.00)
     sale_price = models.DecimalField(decimal_places=2, max_digits=30, blank=True, null=True)
     # image = models.ImageField(upload_to='products/images/', null=True)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('title', 'slug')
 
     def __str__(self):
         return self.title
 
     def get_price(self):
         return self.price
+
+    def get_absolute_url(self):
+        return reverse('single_product', args=[self.slug, ])
+        # return '/product/{}/'.format(self.slug)
 
 
 class ProductImage(models.Model):
@@ -36,7 +44,7 @@ class ProductImage(models.Model):
     def save(self):
         super().save()
         img = Image.open(self.image.path)
-        if img.width > 150 or img.length > 200:
+        if img.width > 150 or img.height > 200:
             output_size = (150, 200)
             img.thumbnail(output_size)
             img.save(self.image.path)
