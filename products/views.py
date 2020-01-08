@@ -5,15 +5,9 @@ from .models import Product
 
 # Create your views here.
 def home(request):
-    if request.user.is_authenticated:
-        #     user_name = 'Justin is the current user'
-        # else:
-        #     user_name = 'Unknown'
-        user_name = request.user
-    else:
-        user_name = request.user
-    context = {'user_name': user_name}
+    all_products = Product.objects.all()
     template = 'products/home.html'
+    context = {'products': all_products}
     return render(request, template, context)
 
 

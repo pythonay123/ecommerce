@@ -5,13 +5,42 @@
         color: #962006;
         }
 {% endblock styles %}
+
+{% block jumbotron %}
+    <div class="container">
+        <div class="jumbotron">
+            <p>This example is a quick exercise to illustrate how the default, static and fixed to the top navbar
+                works. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.
+            </p>
+            <p>To see the difference between static and fixed top navbars, just scroll.</p>
+            <p>To see the difference between static and fixed top navbars, just scroll.</p>
+            <p>
+                <a class="btn btn-lg btn-primary" href="/" role="button">View navbar docs &raquo;</a>
+            </p>
+        </div>
+    </div>
+{% endblock jumbotron %}
+
 {% block content %}
     <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-        <p>Hello, {{ user_name }}</p>
+        <div class="row">
+            {% for product in products %}
+                <div class="col-sm-4">
+                    {{ product.id }}
+                    {{ product.title }}
+                    {{ product.price }}
+                    {% for item in product.productimage_set.all %}
+                        {% if item.featured %}
+                            <img src="{{ item.image.url }}"/>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% cycle "" "" "</div><br/><hr/><div class='row'>" %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
+
 {% block jquery %}
     {# comments here #}
     //alert("Welcome!");

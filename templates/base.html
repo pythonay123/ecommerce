@@ -47,6 +47,10 @@
     </head>
     <body>
         {% include 'navbar.html' %}
+
+        {% block jumbotron %}
+        {% endblock jumbotron %}
+
         <main role="main" class="container">
             {% block content %}
             {% endblock %}
