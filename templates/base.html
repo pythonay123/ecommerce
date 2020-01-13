@@ -32,9 +32,18 @@
             user-select: none;
           }
 
+          .container {
+            padding-top: 65px !important;
+          }
+
           .bg-dark {
-            background-color: #F8F8F8;
-            height: 100px
+            height: 100px;
+            background-color: #25569F !important;
+          }
+
+          .form-inline .btn {
+            background-color: #146EF6 !important;
+            border-color: #146EF6 !important;
           }
 
           @media (min-width: 768px) {
@@ -50,12 +59,11 @@
         {% endblock styles %}
         </style>
     </head>
-    {% include 'navbar.html' %}
     <body>
-        {% block jumbotron %}
-        {% endblock jumbotron %}
-
+        {% include 'navbar.html' %}
         <main role="main" class="container">
+            {% block jumbotron %}
+            {% endblock jumbotron %}
             {% block content %}
             {% endblock %}
         </main><!-- /.container -->

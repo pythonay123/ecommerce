@@ -23,8 +23,24 @@ def all(request):
 def single(request, slug):
     try:
         product = Product.objects.get(slug=slug)
-        context = {'product': product}
+        prod_images = product.productimage_set.all()
+        context = {'product': product, 'prod_images': prod_images}
         template = 'products/single.html'
         return render(request, template, context)
     except ObjectDoesNotExist:
         raise Http404
+
+
+def search(request):
+    try:
+        k = request.GET.get('k')
+    except Exception:
+        k = None
+    if k:
+        products = Product.objects.filter(title__icontains=k)
+        context = {'query': k, 'products': products}
+        template = 'products/results.html'
+    else:
+        context = {}
+        template = 'products/home.html'
+    return render(request, template, context)
