@@ -1,6 +1,7 @@
 from django.db import models
 from PIL import Image
 from django.shortcuts import reverse
+import os
 
 
 # Create your models here.
@@ -38,13 +39,13 @@ class ProductImage(models.Model):
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     def __str__(self):
-        return self.product.title
+        img_dir, img_name = os.path.split(self.image.path)
+        return "{}=>{}".format(self.product.title, img_name)
 
     # Override the save method
     def save(self):
         super().save()
         img = Image.open(self.image.path)
-        if img.width > 150 or img.height > 200:
-            output_size = (150, 200)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        if img.width != 250 and img.height != 350:
+            output_size = (250, 350)
+            img.resize(output_size, Image.ANTIALIAS).save(self.image.path)

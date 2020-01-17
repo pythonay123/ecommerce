@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load no_featured %}
 {% block title %}Welcome to{% endblock title %}
 {% block styles %}
     .starter-template {
@@ -31,9 +32,14 @@
                                 {% if item.featured %}
                                     <img class="img-responsive" src="{{ item.image.url }}"/>
                                 {% else %}
-                                    <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
+                                    {% abs_featured item as no_feat_list %}
                                 {% endif %}
                             {% endfor %}
+<!--                            Displaying the default image if none of the image present is set as featured image-->
+                            {% if product.productimage_set.all|length == no_feat_list|length %}
+                                <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
+                            {% endif %}
+                            {% clear_featured as no_feat_list %}
                         {% else %}
                             <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
                         {% endif %}
@@ -44,7 +50,7 @@
                                 view
                             </a></p>
     <!--                    <a href="{{ product.get_absolute_url }}">{{ product }}</a>-->
-                            {{ product.price }}
+                            &euro;{{ product.price }}
                         </div>
                     </div>
                 </div>
