@@ -1,0 +1,5 @@
+D5D8DA  - gray color
+#A1A3A4 - dark gray color
+
+#25569F  - initial blue color
+#146EF6  - dark blue for button

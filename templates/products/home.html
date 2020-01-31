@@ -2,9 +2,14 @@
 {% load static %}
 {% load no_featured %}
 {% block title %}Welcome to{% endblock title %}
+
 {% block styles %}
     .starter-template {
         color: #251F1F;
+        }
+    .jumbotron .btn-secondary {
+        background-color: #A1A3A4;
+        border-color: #A1A3A4;
         }
 {% endblock styles %}
 
@@ -16,7 +21,7 @@
         <p>To see the difference between static and fixed top navbars, just scroll.</p>
         <p>To see the difference between static and fixed top navbars, just scroll.</p>
         <p>
-            <a class="btn btn-lg btn-primary" href="/" role="button">View navbar docs &raquo;</a>
+            <a class="btn btn-lg btn-secondary" href="/" role="button">View navbar docs &raquo;</a>
         </p>
     </div>
 {% endblock jumbotron %}
