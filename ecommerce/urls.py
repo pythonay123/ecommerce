@@ -25,9 +25,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', product_views.home, name='home'),
     path('products/', product_views.all, name='all_products'),
-    path('product/<slug>/', product_views.single, name='single_product'),
+    path('product/<slug:slug>/', product_views.single, name='single_product'),
     path('s/', product_views.search, name='search'),
-    path('cart', cart_views.view, name='cart_view')
+    path('cart', cart_views.view, name='cart_view'),
+    path('update-cart/<slug:product_slug>/', cart_views.update_cart, name='update_cart'),
 ]
 
 

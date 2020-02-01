@@ -45,7 +45,7 @@
         </div>
         <div class="col-sm-8">
             <div class="pb-2 mt-4 mb-2 border-bottom">
-                <h1>{{ product.title }}<a class="pull-right" href="#">Add to Cart</a></h1>
+                <h1>{{ product.title }}<a class="pull-right" href="{% url 'update_cart' product.slug %}">Add to Cart</a></h1>
                 <hr/>
                     Price: &euro;{{ product.price }}
                 <br/>
