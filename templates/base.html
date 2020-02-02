@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
         <meta name="generator" content="Jekyll v3.8.6">
-        <title>{% block title %}{% endblock title %} AeroPulse Store</title>
+        <title>{% block title %}{% endblock title %} Pulse Store</title>
 
         <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/starter-template/">
 
@@ -41,6 +41,24 @@
             background-color: #D5D8DA !important;
           }
 
+          .navbar .navbar-brand {
+            font-size: 250%;
+          }
+
+          .navbar .navbar-nav > li > a {
+            color: #888585 !important;
+            font-size: 120%;
+          }
+
+          .navbar .navbar-nav > li > a:hover,
+          .navbar .navbar-nav > li > a:focus {
+            color: #FFFFFF !important;
+          }
+
+          .navbar .navbar-nav .dropdown-item {
+            color: #888585 !important;
+          }
+
           .form-inline .btn {
             background-color: #A1A3A4 !important;
             border-color: #A1A3A4 !important;
@@ -50,6 +68,14 @@
             .bd-placeholder-img-lg {
               font-size: 3.5rem;
             }
+            .container {
+              max-width: 1350px;
+            }
+          }
+
+          .navbar .navbar-right {
+            position: absolute;
+            right: 330px;
           }
         </style>
         <!-- Custom styles for this template -->
