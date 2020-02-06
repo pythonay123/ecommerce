@@ -17,6 +17,21 @@
         position: absolute;
         right: 0px;
     }
+    .pull-left {
+        position: absolute;
+        left: 0px;
+    }
+    .cust-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 11em;
+        border-bottom: 1px solid #D5D8DA;
+    }
+    .form-control {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
 {% endblock styles %}
 
 
@@ -44,14 +59,41 @@
             {% endfor %}
         </div>
         <div class="col-sm-8">
-            <div class="pb-2 mt-4 mb-2 border-bottom">
-                <h1>{{ product.title }}<a class="pull-right" href="{% url 'update_cart' product.slug %}">Add to Cart</a></h1>
-                <hr/>
-                    Price: &euro;{{ product.price }}
-                <br/>
-                    Shipping: Free with purchase of over &euro;25
+            <div class="col-sm-12 cust-container">
+                <div class="col-sm-9 no-padding pull-left">
+                    <h1>{{ product.title }}</h1>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <form class="form" method="POST" action="{% url 'update_cart' product.slug %}">
+                    {% csrf_token %}
+                        <input class="default-btn btn-block" type="submit" value="Add to Cart" />
+                        <input class="form-control" name="qty" type="number" value="1" />
+                        {% if product.variation_set.sizes %}
+                            <select class="form-control" name="size">
+                                {% for var in product.variation_set.sizes %}
+                                <option value="{{ var.id }}">{{ var.title|capfirst }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                        {% if product.variation_set.colors %}
+                            <select class="form-control" name="color">
+                                {% for var in product.variation_set.colors %}
+                                <option value="{{ var.id }}">{{ var.title|capfirst }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </form>
+                </div>
             </div>
-            {{ product.description|linebreaks }}
+            <div class="col-sm-12 no-padding">
+                Price: &euro;{{ product.price }}
+                <br />
+                Shipping: Free with purchase of over &euro;25
+            </div>
+            <hr />
+            <div class="col-sm-12 no-padding">
+                {{ product.description|linebreaks }}
+            </div>
         </div>
     </div>
 {% endblock content %}

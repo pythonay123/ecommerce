@@ -49,3 +49,39 @@ class ProductImage(models.Model):
         if img.width != 250 and img.height != 350:
             output_size = (250, 350)
             img.resize(output_size, Image.ANTIALIAS).save(self.image.path)
+
+
+VAR_CATEGORIES = (
+    ('size', 'size'),
+    ('color', 'color'),
+    ('package', 'package'),
+)
+
+
+class VariationManager(models.Manager):
+    def all(self):
+        return super(VariationManager, self).filter(active=True)
+
+    def sizes(self):
+        return self.all().filter(category='size')
+
+    def colors(self):
+        return self.all().filter(category='color')
+
+    def packages(self):
+        return self.all().filter(category='package')
+
+
+class Variation(models.Model):
+    title = models.CharField(max_length=120)
+    category = models.CharField(max_length=120, choices=VAR_CATEGORIES, default='size')
+    image = models.ForeignKey(ProductImage, null=True, blank=True, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(decimal_places=2, max_digits=30, null=True, blank=True)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    active = models.BooleanField(default=True)
+
+    objects = VariationManager()
+
+    def __str__(self):
+        return self.title
