@@ -64,7 +64,7 @@
                     <h1>{{ product.title }}</h1>
                 </div>
                 <div class="col-sm-3 pull-right">
-                    <form class="form" method="POST" action="{% url 'update_cart' product.slug %}">
+                    <form class="form" method="POST" action="{% url 'add_to_cart' product.slug %}">
                     {% csrf_token %}
                         <input class="default-btn btn-block" type="submit" value="Add to Cart" />
                         <input class="form-control" name="qty" type="number" value="1" />

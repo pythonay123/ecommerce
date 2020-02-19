@@ -13,6 +13,13 @@ def view(request):
     if _id:
         cart = Cart.objects.get(id=_id)
         context = {'cart': cart}
+        new_total = 0.00
+        for item in cart.cartitem_set.all():
+            brand_total = float(item.product.price) * item.quantity
+            new_total += brand_total
+        request.session['items_total'] = cart.cartitem_set.count()
+        cart.total = new_total
+        cart.save()
     else:
         empty_message = "Your cart is empty, please shop with us."
         context = {"empty": True, "empty_message": empty_message}
@@ -21,7 +28,20 @@ def view(request):
     return render(request, template, context)
 
 
-def update_cart(request, product_slug):
+def remove_from_cart(request, id):
+    try:
+        _id = request.session['cart_id']
+        cart = Cart.objects.get(id=_id)
+    except:
+        return HttpResponseRedirect(reverse("cart_view"))
+    cartitem = CartItem.objects.get(id=id)
+    cartitem.cart = None
+    cartitem.save()
+    # Send success message
+    return HttpResponseRedirect(reverse("cart_view"))
+
+
+def add_to_cart(request, product_slug):
     request.session.set_expiry(900)
     try:
         _id = request.session['cart_id']
@@ -41,41 +61,23 @@ def update_cart(request, product_slug):
     product_var = []
     if request.method == 'POST':
         qty = request.POST['qty']
-        for item in request.POST:
-            if item != 'qty':
-                key = item
-                value = request.POST.get(key)
-                print(value)
-                try:
-                    variation = Variation.objects.get(id=value)
-                    product_var.append(variation)
-                except:
-                    pass
-        print(product_var)
-
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        if created:
-            pass
-        if qty and int(qty) <= 0:
-            cart_item.quantity = 0
-            cart_item.delete()
-        elif qty:
+        if qty and int(qty) >= 0:
+            for item in request.POST:
+                if item != 'qty':
+                    key = item
+                    value = request.POST.get(key)
+                    print(value)
+                    try:
+                        variation = Variation.objects.get(id=value)
+                        product_var.append(variation)
+                    except:
+                        pass
+            print(product_var)
+            cart_item = CartItem.objects.create(cart=cart, product=product)
             if len(product_var) > 0:
-                cart_item.variations.clear()
-                for item in product_var:
-                    cart_item.variations.add(item)
+                cart_item.variations.add(*product_var)
             cart_item.quantity = qty
-            # cart_item.notes = notes
             cart_item.save()
-        else:
-            pass
-
-        new_total = 0.00
-        for item in cart.cartitem_set.all():
-            brand_total = float(item.product.price) * item.quantity
-            new_total += brand_total
-
-        request.session['items_total'] = cart.cartitem_set.count()
-        cart.total = new_total
-        cart.save()
+            # Success message
+    # Error/failure message
     return HttpResponseRedirect(reverse("cart_view"))

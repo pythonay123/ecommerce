@@ -38,18 +38,28 @@
                         {% if product.productimage_set.all %}
                             {% for item in product.productimage_set.all %}
                                 {% if item.featured %}
-                                    <img class="img-responsive" src="{{ item.image.url }}"/>
+                                    <a href="{{ product.get_absolute_url }}"><div style="
+                                    width:250px;
+                                    height:350px;
+                                    /*background-color:red;*/
+                                    background-image: url('{{ item.image.url }}');
+                                    background-repeat: no-repeat;
+                                    background-size: cover;
+                                    background-position: center;
+                                    margin: 0 auto;">
+                                    </div></a>
+<!--                                    <img class="img-responsive" src="{{ item.image.url }}"/>-->
                                 {% else %}
                                     {% abs_featured item as no_feat_list %}
                                 {% endif %}
                             {% endfor %}
 <!--                            Displaying the default image if none of the image present is set as featured image-->
                             {% if product.productimage_set.all|length == no_feat_list|length %}
-                                <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
+                                <a href="{{ product.get_absolute_url }}"><img class="img-responsive" src="{% static 'img/default.jpg' %}"/></a>
                             {% endif %}
                             {% clear_featured as no_feat_list %}
                         {% else %}
-                            <img class="img-responsive" src="{% static 'img/default.jpg' %}"/>
+                            <a href="{{ product.get_absolute_url }}"><img class="img-responsive" src="{% static 'img/default.jpg' %}"/></a>
                         {% endif %}
                         <div class="caption">
                             <a href="{% url 'single_product' product.slug %}"><h4>{{ product.title }}</h4></a>
