@@ -11,6 +11,11 @@ STATUS_CHOICES = (
 
 
 class Order(models.Model):
+    # Assign a user to the order
+    # Assign address to the order
+    # Add subtotal
+    # Tax
+    # Final Price
     order_id = models.CharField(max_length=120, default="default", unique=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     status = models.CharField(max_length=120, choices=STATUS_CHOICES, default="started")
