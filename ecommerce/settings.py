@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'orders',
     'carts',
     'products',
@@ -131,3 +132,6 @@ STATICFILES_DIRS = (
 # TEMPLATE_DIRS = (
 #     os.path.join(BASE_DIR, 'templates'),
 # )
+
+STRIPE_SECRET_KEY = "sk_test_21dV2y0PTvFwHQZnWrPs5x1j001obcfJSn"
+STRIPE_PUBLISHABLE_KEY = "pk_test_dQeuiYcwc152T1OrvSuO8YUe00b5n7t3ou"

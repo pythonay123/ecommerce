@@ -8,11 +8,10 @@ from products.models import Product, Variation
 def view(request):
     try:
         _id = request.session['cart_id']
+        cart = Cart.objects.get(id=_id)
     except:
         _id = None
     if _id:
-        cart = Cart.objects.get(id=_id)
-        context = {'cart': cart}
         new_total = 0.00
         for item in cart.cartitem_set.all():
             brand_total = float(item.product.price) * item.quantity
@@ -20,6 +19,7 @@ def view(request):
         request.session['items_total'] = cart.cartitem_set.count()
         cart.total = new_total
         cart.save()
+        context = {'cart': cart}
     else:
         empty_message = "Your cart is empty, please shop with us."
         context = {"empty": True, "empty_message": empty_message}

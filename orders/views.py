@@ -2,10 +2,19 @@ from django.shortcuts import render, HttpResponseRedirect
 from carts.models import Cart
 from django.urls import reverse
 from .models import Order
-import time
+from .utils import id_generator
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+def orders(request):
+    context = {}
+    template = "orders/user.html"
+    return render(request, template, context)
+
+
+# Requires user login
+@ login_required
 def checkout(request):
     try:
         id = request.session['cart_id']
@@ -13,16 +22,22 @@ def checkout(request):
     except (KeyError, Cart.DoesNotExist):
         id = None
         return HttpResponseRedirect(reverse('cart_view'))
-    new_order, created = Order.objects.get_or_create(cart=cart)
-    if created:
-        # Assign a user to the order
-        new_order.order_id = str(time.time())
+
+    try:
+        new_order = Order.objects.get(cart=cart)
+    except Order.DoesNotExist:
+        new_order = Order(cart=cart)
+        new_order.user = request.user
+        new_order.order_id = id_generator()
         new_order.save()
+    except:
+        # work on some error meassage
+        return HttpResponseRedirect(reverse('cart_view'))
 
     # Run credit card
     # Assign address to the order
     if new_order.status == "completed":
-        cart.delete()
+        # cart.delete()
         del request.session['cart_id']
         del request.session['items_total']
         return HttpResponseRedirect(reverse('cart_view'))
